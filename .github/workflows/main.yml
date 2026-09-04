@@ -1,0 +1,28 @@
+```yaml
+name: RaceDay CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-repository:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate repository structure
+        run: |
+          test -d docs
+          test -f README.md
+          test -f docs/RaceDay_ERD.png
+          test -f docs/RaceDay_API_Endpoint_Plan.md
+          test -f docs/RaceDay_Database.sql
+
+      - name: Display validation result
+        run: echo "RaceDay repository structure validated successfully."
+```
