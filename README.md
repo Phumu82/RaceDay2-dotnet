@@ -1,21 +1,21 @@
 ## 7. GitHub Repository and CI/CD
 
-The RaceDay project is maintained in a GitHub repository using version control and GitHub Actions for continuous integration. All required planning documentation is stored in the `/docs` directory.
+RaceDay uses GitHub for version control. All required Part 1 planning documentation is stored in the `/docs` directory.
 
-The GitHub Actions workflow automatically validates the required repository structure whenever changes are pushed to the `main` branch or a pull request is created.
+A GitHub Actions workflow (`.github/workflows/ci.yml`) automatically validates the required Part 1 repository structure whenever changes are pushed to the `main` branch, or when a pull request targeting `main` is opened.
 
 The workflow checks that the following required files and folders are present:
 
 * `/docs`
 * `README.md`
-* RaceDay ERD
-* API endpoint plan
-* SQL database script
+* RaceDay ERD (`docs/RaceDay-ERD.md`)
+* API Endpoint Plan (`docs/API-Endpoint-Plan.md`)
+* SQL Database Script (`docs/Database-Script.sql`)
 
-### GitHub Actions Successful Build
+**This is a Part 1 planning-stage CI validation only.** It checks that the required documents exist in the repository — it is **not** an application build pipeline. It does not compile any code, run any tests, connect to a database, or deploy anything, because the RaceDay application itself has not been built yet.
 
-The following screenshot provides evidence of a successful GitHub Actions workflow execution:
+### GitHub Actions Successful Validation
 
-**[INSERT YOUR REAL GITHUB ACTIONS GREEN-BUILD SCREENSHOT HERE]**
+**[INSERT REAL GITHUB ACTIONS SCREENSHOT HERE]**
 
-The successful workflow demonstrates that the repository structure and required Part 1 documentation are being validated automatically through GitHub Actions.
+The screenshot above should show a completed, green (successful) run of the "Part 1 - Planning Document Validation" workflow from the Actions tab of this repository.
