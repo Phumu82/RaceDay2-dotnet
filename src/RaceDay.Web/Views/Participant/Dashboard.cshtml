@@ -1,0 +1,33 @@
+@{ ViewData["Title"] = "Dashboard"; }
+<div class="container section">
+    <h1>Welcome back, @User.Identity!.Name</h1>
+    <div class="stats-grid">
+        <div class="card card-body stat-card"><div><div class="label">Upcoming Events</div><div class="value">@ViewBag.UpcomingCount</div></div>🏁</div>
+        <div class="card card-body stat-card"><div><div class="label">Events Entered</div><div class="value">@ViewBag.EnteredCount</div></div>📋</div>
+        <div class="card card-body stat-card"><div><div class="label">Completed Races</div><div class="value">@ViewBag.CompletedCount</div></div>✅</div>
+        <div class="card card-body stat-card"><div><div class="label">Personal Best</div><div class="value" style="font-size:1.1rem">@(ViewBag.PersonalBest?.FinishTime?.ToString(@"hh\:mm\:ss") ?? "—")</div></div>⏱️</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem">
+        <div class="card card-body">
+            <h3>Next race</h3>
+            @if (ViewBag.NextRace != null)
+            {
+                var next = (RaceDay.Web.ApiClient.Models.EnrolmentResponse)ViewBag.NextRace;
+                <p><strong>@next.EventName</strong></p>
+                <p class="text-muted">@next.EventDate.ToString("dd MMM yyyy") · @next.Location · @next.CategoryName</p>
+            }
+            else { <p class="text-muted">No upcoming races. <a asp-controller="Events" asp-action="Index" style="color:var(--raceday-accent);font-weight:600">Browse events</a></p> }
+        </div>
+        <div class="card card-body">
+            <h3>Latest result</h3>
+            @if (ViewBag.LatestResult != null)
+            {
+                var latest = (RaceDay.Web.ApiClient.Models.ResultResponse)ViewBag.LatestResult;
+                <p><strong>@latest.EventName</strong></p>
+                <p class="text-muted">Position: @(latest.Position?.ToString() ?? "—") · Time: @(latest.FinishTime?.ToString(@"hh\:mm\:ss") ?? "—")</p>
+            }
+            else { <p class="text-muted">No results yet.</p> }
+        </div>
+    </div>
+</div>

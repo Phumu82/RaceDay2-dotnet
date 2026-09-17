@@ -1,0 +1,67 @@
+@model EventResponse
+@{
+    ViewData["Title"] = Model.Name;
+    var categories = ViewBag.Categories as List<CategoryResponse> ?? new();
+    var alreadyEnrolled = ViewBag.AlreadyEnrolled as bool? ?? false;
+}
+<div class="container section">
+    <div class="event-banner" style="height:280px;border-radius:1rem;@(string.IsNullOrEmpty(Model.BannerUrl) ? "" : $"background-image:url('{Model.BannerUrl}');background-size:cover;background-position:center")"></div>
+
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:2rem;margin-top:1.5rem">
+        <div>
+            <span class="badge badge-run">@Model.EventType</span>
+            <h1 style="margin:.5rem 0">@Model.Name</h1>
+            <p class="text-muted">@(Model.Description ?? "No description available.")</p>
+
+            <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+                <div class="card card-body"><div class="label">Date</div><div class="value" style="font-size:1.1rem">@Model.EventDate.ToString("dd MMM yyyy")</div></div>
+                <div class="card card-body"><div class="label">Location</div><div class="value" style="font-size:1.1rem">@Model.Location</div></div>
+                <div class="card card-body"><div class="label">Distance</div><div class="value" style="font-size:1.1rem">@Model.DistanceKm km</div></div>
+            </div>
+
+            <h3 style="margin-top:2rem">Categories</h3>
+            @if (!categories.Any())
+            {
+                <p class="text-muted">No categories published yet.</p>
+            }
+            else if (User.Identity?.IsAuthenticated == true && User.IsInRole("Participant"))
+            {
+                @if (alreadyEnrolled)
+                {
+                    <div class="alert alert-success">You're already enrolled in this event.</div>
+                }
+                else
+                {
+                    <form asp-controller="Events" asp-action="Enrol" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="eventId" value="@Model.Id" />
+                        <div class="form-group">
+                            <select name="categoryId" required>
+                                @foreach (var c in categories)
+                                {
+                                    <option value="@c.Id">@c.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enrol now</button>
+                    </form>
+                }
+            }
+            else
+            {
+                <ul>
+                    @foreach (var c in categories) { <li>@c.Name @(string.IsNullOrEmpty(c.Description) ? "" : $"— {c.Description}")</li> }
+                </ul>
+                @if (User.Identity?.IsAuthenticated != true)
+                {
+                    <p class="text-muted"><a asp-controller="Account" asp-action="Login" style="color:var(--raceday-accent);font-weight:600">Log in</a> as a participant to enrol.</p>
+                }
+            }
+        </div>
+
+        <div class="card card-body">
+            <div class="label">Organised by</div>
+            <div style="font-weight:700;margin-top:.25rem">@(Model.Organiser?.FullName ?? "RaceDay")</div>
+        </div>
+    </div>
+</div>

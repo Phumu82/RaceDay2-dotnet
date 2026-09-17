@@ -1,0 +1,21 @@
+@model List<EnrolmentResponse>
+@{ var ev = ViewBag.Event as EventResponse; ViewData["Title"] = "Enrolments — " + ev?.Name; }
+<div class="container section">
+    <h1>Enrolments for @ev?.Name</h1>
+    @if (!Model.Any())
+    {
+        <div class="empty-state">No enrolments yet.</div>
+    }
+    else
+    {
+        <table class="data-table">
+            <thead><tr><th>Participant</th><th>Email</th><th>Category</th><th>Enrolment date</th><th>Status</th></tr></thead>
+            <tbody>
+            @foreach (var e in Model)
+            {
+                <tr><td>@e.ParticipantName</td><td>@e.ParticipantEmail</td><td>@e.CategoryName</td><td>@e.CreatedAt.ToString("dd MMM yyyy")</td><td>@e.Status</td></tr>
+            }
+            </tbody>
+        </table>
+    }
+</div>

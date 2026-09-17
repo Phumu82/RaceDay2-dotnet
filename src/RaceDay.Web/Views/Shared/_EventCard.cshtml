@@ -1,0 +1,18 @@
+@model EventResponse
+@{
+    var badgeClass = Model.EventType switch { EventType.Run => "badge-run", EventType.Walk => "badge-walk", _ => "badge-cycle" };
+    var bg = string.IsNullOrEmpty(Model.BannerUrl) ? "" : $"background-image:url('{Model.BannerUrl}')";
+}
+<a class="card event-card" asp-controller="Events" asp-action="Details" asp-route-id="@Model.Id">
+    <div class="event-banner" style="@bg">
+        <span class="badge @badgeClass" style="margin:.75rem">@Model.EventType</span>
+    </div>
+    <div class="card-body">
+        <h3 style="margin:0 0 .35rem;font-size:1.05rem">@Model.Name</h3>
+        <p class="text-muted" style="font-size:.85rem;min-height:2.2em">@(string.IsNullOrWhiteSpace(Model.Description) ? "No description available." : Model.Description)</p>
+        <div class="text-muted" style="font-size:.85rem;margin-top:.5rem">📅 @Model.EventDate.ToString("dd MMM yyyy")</div>
+        <div class="text-muted" style="font-size:.85rem">📍 @Model.Location</div>
+        <div class="text-muted" style="font-size:.85rem">🏁 @Model.DistanceKm km</div>
+        <div class="btn btn-outline btn-block" style="margin-top:1rem">View Details</div>
+    </div>
+</a>

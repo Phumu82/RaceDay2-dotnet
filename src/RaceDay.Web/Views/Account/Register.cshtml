@@ -1,0 +1,38 @@
+@model RegisterViewModel
+@{ ViewData["Title"] = "Sign up"; }
+<div class="container section" style="max-width:460px">
+    <h1>Create your account</h1>
+    <div class="card"><div class="card-body">
+        <form asp-action="Register" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+            <div class="form-group">
+                <label asp-for="FullName"></label>
+                <input asp-for="FullName" />
+                <span asp-validation-for="FullName" class="field-validation-error"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" type="email" />
+                <span asp-validation-for="Email" class="field-validation-error"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" type="password" />
+                <span asp-validation-for="Password" class="field-validation-error"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword"></label>
+                <input asp-for="ConfirmPassword" type="password" />
+                <span asp-validation-for="ConfirmPassword" class="field-validation-error"></span>
+            </div>
+            <div class="form-group">
+                <label>I am a...</label>
+                <select asp-for="Role" asp-items="Html.GetEnumSelectList<UserRole>()"></select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Create account</button>
+        </form>
+        <p class="text-muted" style="margin-top:1rem">Already have an account? <a asp-action="Login" style="color:var(--raceday-accent);font-weight:600">Log in</a></p>
+    </div></div>
+</div>
+<partial name="_ValidationScriptsPartial" />

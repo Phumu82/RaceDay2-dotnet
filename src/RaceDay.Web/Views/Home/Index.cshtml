@@ -1,0 +1,29 @@
+@model List<EventResponse>
+@{ ViewData["Title"] = "Home"; }
+<section class="hero">
+    <div class="container">
+        <h1 class="display" style="font-size:2.75rem;max-width:600px">Find your next race. Manage every finish line.</h1>
+        <p style="max-width:560px;color:#CBD5E1;margin-top:1rem">RaceDay connects participants with runs, walks and cycles — and gives organisers everything they need to manage entries and results.</p>
+        <div style="margin-top:1.75rem;display:flex;gap:.75rem">
+            <a class="btn btn-primary" asp-controller="Events" asp-action="Index">Browse events</a>
+            <a class="btn btn-outline" asp-controller="Account" asp-action="Register" style="background:transparent;color:#fff;border-color:#4B5A70">Get started</a>
+        </div>
+    </div>
+</section>
+
+<div class="container section">
+    <div class="page-header"><h2>Upcoming events</h2><a asp-controller="Events" asp-action="Index">View all &rarr;</a></div>
+    @if (!Model.Any())
+    {
+        <div class="empty-state">No upcoming events yet. Check back soon.</div>
+    }
+    else
+    {
+        <div class="event-grid">
+            @foreach (var ev in Model)
+            {
+                <partial name="_EventCard" model="ev" />
+            }
+        </div>
+    }
+</div>

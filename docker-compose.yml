@@ -1,0 +1,40 @@
+# Local multi-container run: SQL Server + API + Web.
+# Build a specific target with: docker build --target api -t raceday-api .
+#                                docker build --target web -t raceday-web .
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "RaceDay!Dev123"
+    ports:
+      - "1433:1433"
+    volumes:
+      - raceday-sqldata:/var/opt/mssql
+
+  api:
+    build:
+      context: .
+      target: api
+    depends_on:
+      - sqlserver
+    environment:
+      ConnectionStrings__RaceDayDb: "Server=sqlserver;Database=RaceDayDB;User Id=sa;Password=RaceDay!Dev123;TrustServerCertificate=True"
+      Jwt__Key: "CHANGE-ME-set-a-real-32+char-secret-via-env-or-secrets-manager"
+      Storage__Provider: "Local"
+    ports:
+      - "8080:8080"
+
+  web:
+    build:
+      context: .
+      target: web
+    depends_on:
+      - api
+    environment:
+      Api__BaseUrl: "http://api:8080/"
+    ports:
+      - "8081:8081"
+
+volumes:
+  raceday-sqldata:

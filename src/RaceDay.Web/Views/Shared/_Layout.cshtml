@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - RaceDay</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>    <header class="navbar">
+        <div class="container">
+            <a class="brand" asp-controller="Home" asp-action="Index">🏁 RACEDAY</a>
+            <nav>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    if (User.IsInRole("Organiser"))
+                    {
+                        <a asp-controller="Organiser" asp-action="Dashboard">Dashboard</a>
+                        <a asp-controller="Organiser" asp-action="Events">My Events</a>
+                        <a asp-controller="Organiser" asp-action="CreateEvent">Create Event</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Participant" asp-action="Dashboard">Dashboard</a>
+                        <a asp-controller="Events" asp-action="Index">Events</a>
+                        <a asp-controller="Participant" asp-action="MyEvents">My Events</a>
+                        <a asp-controller="Participant" asp-action="MyResults">My Results</a>
+                    }
+                    <a asp-controller="Profile" asp-action="Index">Profile</a>
+                    <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit">Log out</button>
+                    </form>
+                }
+                else
+                {
+                    <a asp-controller="Events" asp-action="Index">Events</a>
+                    <a asp-controller="Home" asp-action="About">About</a>
+                    <a asp-controller="Account" asp-action="Login">Log in</a>
+                    <a class="btn-accent" asp-controller="Account" asp-action="Register">Sign up</a>
+                }
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        @if (TempData["Success"] != null)
+        {
+            <div class="container" style="margin-top:1.5rem"><div class="alert alert-success">@TempData["Success"]</div></div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="container" style="margin-top:1.5rem"><div class="alert alert-error">@TempData["Error"]</div></div>
+        }
+        @RenderBody()
+    </main>
+
+    <footer class="footer">
+        <div class="container">&copy; @DateTime.Now.Year RaceDay. Race management made simple.</div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,45 @@
+@model CategoryManagementViewModel
+@{ ViewData["Title"] = "Categories — " + Model.Event.Name; }
+<div class="container section">
+    <h1>Categories for @Model.Event.Name</h1>
+
+    <div class="card card-body" style="margin-bottom:1.5rem">
+        <h3>Add a category</h3>
+        <form asp-action="SaveCategory" method="post" style="display:flex;gap:.75rem;align-items:flex-end;flex-wrap:wrap">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="EventId" value="@Model.Event.Id" />
+            <div class="form-group" style="margin-bottom:0;flex:1;min-width:160px"><label>Name</label><input name="Name" required /></div>
+            <div class="form-group" style="margin-bottom:0;flex:2;min-width:200px"><label>Description</label><input name="Description" /></div>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+
+    @if (!Model.Categories.Any())
+    {
+        <div class="empty-state">No categories yet.</div>
+    }
+    else
+    {
+        <table class="data-table">
+            <thead><tr><th>Name</th><th>Description</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var c in Model.Categories)
+            {
+                <tr>
+                    <td>@c.Name</td>
+                    <td class="text-muted">@c.Description</td>
+                    <td>
+                        <form asp-action="DeleteCategory" method="post" style="display:inline" onsubmit="return confirm('Delete this category?');">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@c.Id" />
+                            <input type="hidden" name="eventId" value="@Model.Event.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    <a asp-action="Events" style="display:inline-block;margin-top:1.5rem">&larr; Back to my events</a>
+</div>
