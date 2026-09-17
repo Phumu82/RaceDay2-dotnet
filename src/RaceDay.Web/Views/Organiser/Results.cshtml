@@ -1,0 +1,67 @@
+@{
+    var ev = ViewBag.Event as EventResponse;
+    var results = ViewBag.Results as List<ResultResponse> ?? new();
+    var pending = ViewBag.PendingEnrolments as List<EnrolmentResponse> ?? new();
+    ViewData["Title"] = "Results — " + ev?.Name;
+}
+<div class="container section">
+    <h1>Results for @ev?.Name</h1>
+
+    @if (pending.Any())
+    {
+        <h3>Record a result</h3>
+        <table class="data-table">
+            <thead><tr><th>Participant</th><th>Category</th><th>Finish time</th><th>Position</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var e in pending)
+            {
+                <tr>
+                    <td>@e.ParticipantName</td>
+                    <td>@e.CategoryName</td>
+                    <td colspan="2">
+                        <form asp-action="RecordResult" method="post" style="display:flex;gap:.5rem">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="eventId" value="@ev!.Id" />
+                            <input type="hidden" name="enrolmentId" value="@e.Id" />
+                            <input type="text" name="finishTime" placeholder="hh:mm:ss" style="width:110px" />
+                            <input type="number" name="position" placeholder="Pos." style="width:80px" />
+                            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+
+    <h3 style="margin-top:2rem">Recorded results</h3>
+    @if (!results.Any())
+    {
+        <p class="text-muted">No results recorded yet.</p>
+    }
+    else
+    {
+        <table class="data-table">
+            <thead><tr><th>Participant</th><th>Category</th><th>Finish time</th><th>Position</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var r in results)
+            {
+                <tr>
+                    <td>@r.ParticipantName</td>
+                    <td>@r.CategoryName</td>
+                    <td colspan="2">
+                        <form asp-action="EditResult" method="post" style="display:flex;gap:.5rem">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="eventId" value="@ev!.Id" />
+                            <input type="hidden" name="resultId" value="@r.Id" />
+                            <input type="text" name="finishTime" value="@r.FinishTime?.ToString(@"hh\:mm\:ss")" style="width:110px" />
+                            <input type="number" name="position" value="@r.Position" style="width:80px" />
+                            <button type="submit" class="btn btn-outline btn-sm">Update</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+</div>

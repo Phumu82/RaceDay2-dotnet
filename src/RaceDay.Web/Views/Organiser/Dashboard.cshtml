@@ -1,0 +1,35 @@
+@{ ViewData["Title"] = "Organiser Dashboard"; var events = ViewBag.Events as List<EventResponse> ?? new(); }
+<div class="container section">
+    <div class="page-header"><h1>Organiser dashboard</h1><a class="btn btn-primary" asp-action="CreateEvent">+ Create event</a></div>
+    <div class="stats-grid">
+        <div class="card card-body stat-card"><div><div class="label">Total Events</div><div class="value">@ViewBag.TotalEvents</div></div>📅</div>
+        <div class="card card-body stat-card"><div><div class="label">Upcoming Events</div><div class="value">@ViewBag.UpcomingEvents</div></div>🏁</div>
+        <div class="card card-body stat-card"><div><div class="label">Completed Events</div><div class="value">@ViewBag.CompletedEvents</div></div>✅</div>
+        <div class="card card-body stat-card"><div><div class="label">Total Enrolments</div><div class="value">@ViewBag.TotalEnrolments</div></div>👥</div>
+    </div>
+
+    <h3 style="margin-top:2rem">Recent events</h3>
+    @if (!events.Any())
+    {
+        <div class="empty-state">No events yet. Create your first one.</div>
+    }
+    else
+    {
+        <table class="data-table">
+            <thead><tr><th>Event</th><th>Date</th><th>Type</th><th>Enrolments</th><th>Categories</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var e in events.Take(8))
+            {
+                <tr>
+                    <td>@e.Name</td>
+                    <td>@e.EventDate.ToString("dd MMM yyyy")</td>
+                    <td>@e.EventType</td>
+                    <td>@e.EnrolmentCount</td>
+                    <td>@e.CategoryCount</td>
+                    <td><a asp-action="ManageEvent" asp-route-eventId="@e.Id">Manage &rarr;</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+</div>

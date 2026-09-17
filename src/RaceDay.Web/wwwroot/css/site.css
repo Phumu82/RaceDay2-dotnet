@@ -1,0 +1,114 @@
+:root {
+  --raceday-navy: #0F1B2D;
+  --raceday-navy-light: #1C2D44;
+  --raceday-navy-dark: #080F1A;
+  --raceday-accent: #FF6B35;
+  --raceday-accent-dark: #E55A28;
+  --raceday-accent-light: #FFF1EC;
+  --raceday-success: #0F9D58;
+  --raceday-warning: #F4B400;
+  --raceday-error: #DC2626;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  background: #F7F8FA;
+  color: #1F2937;
+  margin: 0;
+}
+
+h1, h2, h3, .display { font-family: "Archivo", "Inter", system-ui, sans-serif; font-weight: 800; }
+
+a { color: inherit; text-decoration: none; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* ---------- Navbar ---------- */
+.navbar {
+  background: var(--raceday-navy);
+  position: sticky; top: 0; z-index: 40;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+.navbar .container { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.navbar .brand { display: flex; align-items: center; gap: .5rem; color: #fff; font-size: 1.25rem; font-weight: 800; }
+.navbar nav { display: flex; gap: .25rem; align-items: center; }
+.navbar nav a, .navbar nav button {
+  color: #CBD5E1; padding: .5rem .9rem; border-radius: .5rem; font-weight: 600; font-size: .9rem;
+  background: none; border: none; cursor: pointer;
+}
+.navbar nav a.active, .navbar nav a:hover, .navbar nav button:hover { background: var(--raceday-navy-light); color: #fff; }
+.navbar .btn-accent { background: var(--raceday-accent); color: #fff !important; }
+.navbar .btn-accent:hover { background: var(--raceday-accent-dark) !important; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
+  padding: .6rem 1.2rem; border-radius: .6rem; font-weight: 600; font-size: .9rem;
+  border: 1px solid transparent; cursor: pointer; transition: all .15s ease;
+}
+.btn-primary { background: var(--raceday-accent); color: #fff; }
+.btn-primary:hover { background: var(--raceday-accent-dark); }
+.btn-outline { background: #fff; border-color: #D1D5DB; color: #1F2937; }
+.btn-outline:hover { border-color: var(--raceday-accent); color: var(--raceday-accent); }
+.btn-danger { background: var(--raceday-error); color: #fff; }
+.btn-sm { padding: .4rem .8rem; font-size: .8rem; }
+.btn-block { width: 100%; }
+
+/* ---------- Cards ---------- */
+.card {
+  background: #fff; border-radius: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  border: 1px solid rgba(0,0,0,.05); overflow: hidden;
+}
+.card-body { padding: 1.25rem; }
+.event-card { display: flex; flex-direction: column; transition: transform .2s, box-shadow .2s; }
+.event-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,.12); }
+.event-banner { height: 180px; background-size: cover; background-position: center; background-color: var(--raceday-navy-light); }
+.event-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+
+.stat-card { display: flex; align-items: center; justify-content: space-between; }
+.stat-card .value { font-size: 1.75rem; font-weight: 800; font-family: "Archivo", sans-serif; }
+.stat-card .label { color: #6B7280; font-size: .85rem; font-weight: 600; }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+
+/* ---------- Badges ---------- */
+.badge { display: inline-block; padding: .2rem .65rem; border-radius: 999px; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
+.badge-run { background: var(--raceday-accent-light); color: var(--raceday-accent-dark); }
+.badge-walk { background: #E6F4EA; color: var(--raceday-success); }
+.badge-cycle { background: #E8EEFB; color: #2554C7; }
+.badge-registered { background: #EEF2FF; color: #4338CA; }
+.badge-completed { background: #E6F4EA; color: var(--raceday-success); }
+.badge-attended { background: #FEF3C7; color: #92400E; }
+.badge-withdrawn { background: #FEE2E2; color: var(--raceday-error); }
+
+/* ---------- Forms ---------- */
+.form-group { margin-bottom: 1.1rem; }
+label { display: block; font-weight: 600; font-size: .85rem; margin-bottom: .35rem; color: #374151; }
+input[type=text], input[type=email], input[type=password], input[type=number], input[type=date], input[type=file], select, textarea {
+  width: 100%; padding: .6rem .8rem; border: 1px solid #D1D5DB; border-radius: .5rem; font-size: .95rem; font-family: inherit;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--raceday-accent); box-shadow: 0 0 0 3px var(--raceday-accent-light); }
+.field-validation-error, .validation-summary-errors { color: var(--raceday-error); font-size: .82rem; }
+.validation-summary-errors ul { margin: 0; padding-left: 1.2rem; }
+
+/* ---------- Tables ---------- */
+table.data-table { width: 100%; border-collapse: collapse; background: #fff; }
+table.data-table th { text-align: left; font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; color: #6B7280; padding: .75rem 1rem; border-bottom: 2px solid #F1F5F9; }
+table.data-table td { padding: .85rem 1rem; border-bottom: 1px solid #F1F5F9; font-size: .9rem; }
+
+/* ---------- Misc ---------- */
+.page-header { display: flex; align-items: center; justify-content: space-between; margin: 2rem 0 .5rem; flex-wrap: wrap; gap: 1rem; }
+.section { padding: 2.5rem 0; }
+.hero { background: linear-gradient(135deg, var(--raceday-navy), var(--raceday-navy-light)); color: #fff; padding: 4rem 0; }
+.alert { padding: .9rem 1.1rem; border-radius: .6rem; margin-bottom: 1rem; font-size: .9rem; }
+.alert-success { background: #E6F4EA; color: #0F5C31; }
+.alert-error { background: #FEE2E2; color: #991B1B; }
+.text-muted { color: #6B7280; }
+.footer { background: var(--raceday-navy-dark); color: #94A3B8; padding: 2rem 0; margin-top: 4rem; font-size: .85rem; text-align: center; }
+.filters-bar { display: flex; gap: .75rem; flex-wrap: wrap; align-items: flex-end; background: #fff; padding: 1rem; border-radius: .8rem; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+.empty-state { text-align: center; padding: 3rem 1rem; color: #6B7280; }
+@media (max-width: 640px) {
+  .navbar nav { display: none; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+}

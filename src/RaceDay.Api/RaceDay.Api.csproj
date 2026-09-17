@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>raceday-api-secrets</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Server-side validation is implemented via DataAnnotations on the
+         DTOs (see RaceDay.Api/DTOs/*.cs), enforced automatically by
+         [ApiController]'s built-in model validation — no separate
+         validation package is required. -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RaceDay.Domain\RaceDay.Domain.csproj" />
+    <ProjectReference Include="..\RaceDay.Infrastructure\RaceDay.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,30 @@
+@model EventFormViewModel
+@{ ViewData["Title"] = Model.Id.HasValue ? "Edit Event" : "Create Event"; }
+<div class="container section" style="max-width:640px">
+    <h1>@ViewData["Title"]</h1>
+    <div class="card"><div class="card-body">
+        <form asp-controller="Organiser" asp-action="SaveEvent" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="BannerUrl" />
+            <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+
+            <div class="form-group"><label asp-for="Name"></label><input asp-for="Name" /><span asp-validation-for="Name" class="field-validation-error"></span></div>
+            <div class="form-group"><label asp-for="Description"></label><textarea asp-for="Description" rows="3"></textarea></div>
+            <div class="form-group"><label asp-for="EventDate"></label><input asp-for="EventDate" type="date" /></div>
+            <div class="form-group"><label asp-for="Location"></label><input asp-for="Location" /></div>
+            <div class="form-group"><label asp-for="DistanceKm"></label><input asp-for="DistanceKm" type="number" step="0.01" /></div>
+            <div class="form-group"><label asp-for="EventType"></label><select asp-for="EventType" asp-items="Html.GetEnumSelectList<EventType>()"></select></div>
+            <div class="form-group">
+                <label asp-for="BannerFile">Event banner</label>
+                <input asp-for="BannerFile" type="file" accept="image/*" />
+                @if (!string.IsNullOrEmpty(Model.BannerUrl))
+                {
+                    <p class="text-muted" style="font-size:.8rem;margin-top:.35rem">Current banner is set. Uploading a new file will replace it.</p>
+                }
+            </div>
+            <button type="submit" class="btn btn-primary">Save event</button>
+        </form>
+    </div></div>
+</div>
+<partial name="_ValidationScriptsPartial" />

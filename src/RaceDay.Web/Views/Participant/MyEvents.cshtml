@@ -1,0 +1,30 @@
+@model List<EnrolmentResponse>
+@{ ViewData["Title"] = "My Events"; }
+<div class="container section">
+    <h1>My events</h1>
+    @if (!Model.Any())
+    {
+        <div class="empty-state">You haven't entered any events yet. <a asp-controller="Events" asp-action="Index" style="color:var(--raceday-accent);font-weight:600">Browse events</a></div>
+    }
+    else
+    {
+        <table class="data-table">
+            <thead><tr><th>Event</th><th>Category</th><th>Date</th><th>Location</th><th>Distance</th><th>Status</th><th>Enrolled</th></tr></thead>
+            <tbody>
+            @foreach (var e in Model)
+            {
+                var badge = e.Status switch { EnrolmentStatus.Completed => "badge-completed", EnrolmentStatus.Attended => "badge-attended", EnrolmentStatus.Withdrawn => "badge-withdrawn", _ => "badge-registered" };
+                <tr>
+                    <td><a asp-controller="Events" asp-action="Details" asp-route-id="@e.EventId">@e.EventName</a></td>
+                    <td>@e.CategoryName</td>
+                    <td>@e.EventDate.ToString("dd MMM yyyy")</td>
+                    <td>@e.Location</td>
+                    <td>@e.DistanceKm km</td>
+                    <td><span class="badge @badge">@e.Status</span></td>
+                    <td>@e.CreatedAt.ToString("dd MMM yyyy")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+</div>

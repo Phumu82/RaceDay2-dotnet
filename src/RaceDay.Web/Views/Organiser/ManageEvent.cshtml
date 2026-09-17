@@ -1,0 +1,52 @@
+@model EventResponse
+@{
+    ViewData["Title"] = "Manage — " + Model.Name;
+    var enrolments = ViewBag.Enrolments as List<EnrolmentResponse> ?? new();
+    var results = ViewBag.Results as List<ResultResponse> ?? new();
+}
+<div class="container section">
+    <div class="page-header">
+        <h1>@Model.Name</h1>
+        <div style="display:flex;gap:.5rem">
+            <a class="btn btn-outline btn-sm" asp-action="EditEvent" asp-route-id="@Model.Id">Edit event</a>
+            <a class="btn btn-outline btn-sm" asp-action="ManageCategories" asp-route-eventId="@Model.Id">Categories</a>
+            <a class="btn btn-primary btn-sm" asp-action="Results" asp-route-eventId="@Model.Id">Record results</a>
+        </div>
+    </div>
+
+    <h3>Enrolments (@enrolments.Count)</h3>
+    @if (!enrolments.Any())
+    {
+        <p class="text-muted">No enrolments yet.</p>
+    }
+    else
+    {
+        <table class="data-table">
+            <thead><tr><th>Participant</th><th>Email</th><th>Category</th><th>Status</th><th>Enrolled</th></tr></thead>
+            <tbody>
+            @foreach (var e in enrolments)
+            {
+                <tr><td>@e.ParticipantName</td><td>@e.ParticipantEmail</td><td>@e.CategoryName</td><td>@e.Status</td><td>@e.CreatedAt.ToString("dd MMM yyyy")</td></tr>
+            }
+            </tbody>
+        </table>
+    }
+
+    <h3 style="margin-top:2rem">Results (@results.Count)</h3>
+    @if (!results.Any())
+    {
+        <p class="text-muted">No results recorded yet.</p>
+    }
+    else
+    {
+        <table class="data-table">
+            <thead><tr><th>Participant</th><th>Category</th><th>Finish time</th><th>Position</th></tr></thead>
+            <tbody>
+            @foreach (var r in results)
+            {
+                <tr><td>@r.ParticipantName</td><td>@r.CategoryName</td><td>@(r.FinishTime?.ToString(@"hh\:mm\:ss") ?? "—")</td><td>@(r.Position?.ToString() ?? "—")</td></tr>
+            }
+            </tbody>
+        </table>
+    }
+</div>

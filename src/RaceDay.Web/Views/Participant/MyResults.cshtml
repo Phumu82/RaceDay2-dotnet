@@ -1,0 +1,28 @@
+@model List<ResultResponse>
+@{ ViewData["Title"] = "My Results"; }
+<div class="container section">
+    <h1>My results</h1>
+    @if (!Model.Any())
+    {
+        <div class="empty-state">No results recorded yet.</div>
+    }
+    else
+    {
+        <table class="data-table">
+            <thead><tr><th>Event</th><th>Date</th><th>Category</th><th>Distance</th><th>Finish time</th><th>Position</th></tr></thead>
+            <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td><a asp-controller="Events" asp-action="Details" asp-route-id="@r.EventId">@r.EventName</a></td>
+                    <td>@r.EventDate.ToString("dd MMM yyyy")</td>
+                    <td>@r.CategoryName</td>
+                    <td>@r.DistanceKm km</td>
+                    <td>@(r.FinishTime?.ToString(@"hh\:mm\:ss") ?? "—")</td>
+                    <td>@(r.Position?.ToString() ?? "—")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+</div>

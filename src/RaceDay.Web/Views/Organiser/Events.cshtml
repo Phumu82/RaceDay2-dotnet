@@ -1,0 +1,30 @@
+@model List<EventResponse>
+@{ ViewData["Title"] = "My Events"; }
+<div class="container section">
+    <div class="page-header"><h1>My events</h1><a class="btn btn-primary" asp-action="CreateEvent">+ Create event</a></div>
+    @if (!Model.Any())
+    {
+        <div class="empty-state">No events yet.</div>
+    }
+    else
+    {
+        <div class="event-grid">
+        @foreach (var e in Model)
+        {
+            <div class="card">
+                <partial name="_EventCard" model="e" />
+                <div class="card-body" style="display:flex;gap:.5rem;border-top:1px solid #F1F5F9">
+                    <a class="btn btn-outline btn-sm" asp-action="EditEvent" asp-route-id="@e.Id">Edit</a>
+                    <a class="btn btn-outline btn-sm" asp-action="ManageCategories" asp-route-eventId="@e.Id">Categories</a>
+                    <a class="btn btn-outline btn-sm" asp-action="Results" asp-route-eventId="@e.Id">Results</a>
+                    <form asp-action="DeleteEvent" method="post" onsubmit="return confirm('Delete this event?');">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@e.Id" />
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </div>
+            </div>
+        }
+        </div>
+    }
+</div>

@@ -1,0 +1,24 @@
+@model ProfileViewModel
+@{ ViewData["Title"] = "My Profile"; }
+<div class="container section" style="max-width:520px">
+    <h1>My profile</h1>
+    <div class="card card-body">
+        <form asp-controller="Profile" asp-action="Update" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+
+            @if (!string.IsNullOrEmpty(Model.AvatarUrl))
+            {
+                <img src="@Model.AvatarUrl" alt="Avatar" style="width:96px;height:96px;border-radius:50%;object-fit:cover;margin-bottom:1rem" />
+            }
+
+            <div class="form-group"><label asp-for="FullName"></label><input asp-for="FullName" /></div>
+            <div class="form-group"><label>Email</label><input value="@Model.Email" disabled /></div>
+            <div class="form-group"><label>Role</label><input value="@Model.Role" disabled /></div>
+            <div class="form-group"><label>Member since</label><input value="@Model.CreatedAt.ToString("dd MMM yyyy")" disabled /></div>
+            <div class="form-group"><label asp-for="AvatarFile">Profile picture</label><input asp-for="AvatarFile" type="file" accept="image/*" /></div>
+
+            <button type="submit" class="btn btn-primary">Save changes</button>
+        </form>
+    </div>
+</div>
