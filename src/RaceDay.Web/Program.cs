@@ -10,21 +10,8 @@ builder.Services.AddTransient<AuthTokenHandler>();
 // EF Core / SQL Server reference at all (see the csproj).
 builder.Services.AddHttpClient<IRaceDayApiClient, RaceDayApiClient>(client =>
 {
-    var baseUrl = Environment.GetEnvironmentVariable("API_BASE_URL")
-        ?? builder.Configuration["Api:BaseUrl"]
-        ?? throw new InvalidOperationException("Api:BaseUrl is not configured.");
-
-    if (!Uri.TryCreate(baseUrl, UriKind.Absolute, out var apiUri))
-    {
-        throw new InvalidOperationException($"Api:BaseUrl is not a valid absolute URL: '{baseUrl}'.");
-    }
-
-    if (!builder.Environment.IsDevelopment() && apiUri.IsLoopback)
-    {
-        throw new InvalidOperationException("Production requires a non-local API endpoint. Set API_BASE_URL or Api:BaseUrl to your cloud API URL.");
-    }
-
-    client.BaseAddress = apiUri;
+    var baseUrl = builder.Configuration["Api:BaseUrl"] ?? throw new InvalidOperationException("Api:BaseUrl is not configured.");
+    client.BaseAddress = new Uri(baseUrl);
 }).AddHttpMessageHandler<AuthTokenHandler>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

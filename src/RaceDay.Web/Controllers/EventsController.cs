@@ -1,4 +1,3 @@
-using System.Net.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaceDay.Web.ApiClient;
@@ -11,28 +10,14 @@ namespace RaceDay.Web.Controllers;
 public class EventsController : Controller
 {
     private readonly IRaceDayApiClient _api;
-    private readonly ILogger<EventsController> _logger;
-    public EventsController(IRaceDayApiClient api, ILogger<EventsController> logger)
-    {
-        _api = api;
-        _logger = logger;
-    }
+    public EventsController(IRaceDayApiClient api) => _api = api;
 
     // GET /Events?search=&type=&location=&from=&to=
     public async Task<IActionResult> Index(string? search, EventType? type, string? location, DateOnly? from, DateOnly? to)
     {
-        try
-        {
-            var events = await _api.SearchEventsAsync(search, type, location, from, to);
-            var vm = new EventBrowseViewModel { Search = search, Type = type, Location = location, From = from, To = to, Events = events };
-            return View(vm);
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogWarning(ex, "RaceDay API is unreachable while loading Events page.");
-            TempData["Error"] = "RaceDay services are temporarily unavailable. Please try again in a moment.";
-            return View(new EventBrowseViewModel { Search = search, Type = type, Location = location, From = from, To = to });
-        }
+        var events = await _api.SearchEventsAsync(search, type, location, from, to);
+        var vm = new EventBrowseViewModel { Search = search, Type = type, Location = location, From = from, To = to, Events = events };
+        return View(vm);
     }
 
     public async Task<IActionResult> Details(Guid id)
@@ -53,12 +38,6 @@ public class EventsController : Controller
         catch (ApiException ex) when (ex.StatusCode == 404)
         {
             return NotFound();
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogWarning(ex, "RaceDay API is unreachable while loading event details for {EventId}.", id);
-            TempData["Error"] = "RaceDay services are temporarily unavailable. Please try again in a moment.";
-            return RedirectToAction(nameof(Index));
         }
     }
 
